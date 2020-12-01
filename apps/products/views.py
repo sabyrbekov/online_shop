@@ -4,7 +4,7 @@ from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
 from .models import ProductModel
-from .permissions import IsAdminUser
+from .permissions import IsAdminOrReadOnly
 from .serializers import ProductSerializer, WishAPISerializer
 from rest_framework.views import APIView
 from rest_framework import serializers
@@ -16,7 +16,7 @@ User = get_user_model()
 
 
 class ProductListApiView(generics.ListCreateAPIView):
-    permission_classes = (IsAdminUser, )
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrReadOnly )
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
 
@@ -35,12 +35,12 @@ class ProductListApiView(generics.ListCreateAPIView):
         return queryset
 
 class ProductDetailApiView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrReadOnly )
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
 
 class ProductViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminUser )
+    permission_classes = (IsAdminOrReadOnly )
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
 

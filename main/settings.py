@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'django_filters',
     'apps.category',
     'apps.products',
-    'apps.authentication'
+    'apps.authentication',
+    'apps.order',
 ]
 
 AUTH_USER_MODEL = 'authentication.User'
