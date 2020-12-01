@@ -16,7 +16,7 @@ User = get_user_model()
 
 
 class ProductListApiView(generics.ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (IsAdminUser, )
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
 
@@ -40,7 +40,7 @@ class ProductDetailApiView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 
 class ProductViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAdminUser )
+    permission_classes = (IsAdminUser )
     queryset = ProductModel.objects.all()
     serializer_class = ProductSerializer
 
@@ -50,6 +50,7 @@ class WishListApiView(generics.ListCreateAPIView):
     serializer_class = WishAPISerializer
 
     def get_queryset(self):
+        queryset = Wish.objects.all()
         return Wish.objects.filter(user=self.request.user.id)
 
     def post(self, request, *args, **kwargs):
@@ -70,26 +71,24 @@ class WishListApiView(generics.ListCreateAPIView):
 class WishAdd(APIView):
     
     def get(self, request, pk):
-        product_= ProductModel.objects.all()
-        #   Wish.objects.user = request.user 
-        #     print(Wish.objects.user)
-        #     # product = ProductModel.objects.all()
-        product = ProductModel.objects.get(pk=product_.id)
+        product = ProductModel.objects.get(pk=pk)
         user = request.user
-        # print(request.user)
-        # print(user)
         url = request.build_absolute_uri()
-        if Wish.objects.filter(user=user.id, product=product.id):
-            raise serializers.ValidationError('This product in WishList')
-        new_favorite = Wish.objects.create(user=user.id, product=product.id)
+        if Wish.objects.filter(user=user.id, product=pk):
+            raise serializers.ValidationError('OK')
+        new_favorite = Wish.objects.create(user=user, product=product)
         return HttpResponseRedirect(redirect_to=url)
 
 
 class WishDelete(APIView):
 
-    def get(self, request, id):
+    def get(self, request, pk):
         user = request.user
-        favor = Wish.objects.filter(user=user.id, product=id)
+        print(user)
+        product = ProductModel.objects.get(pk=pk)
+
+        favor = Wish.objects.filter(user=user.id, product=pk)
+        print(favor)
         if favor:
             favor.delete()
             raise serializers.ValidationError('Deleted!')

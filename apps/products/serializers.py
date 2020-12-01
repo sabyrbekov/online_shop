@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
 from apps.category.serializers import CategoryAPISerializer, BrandAPISerializer
-from .models import ProductModel, Wish
+from .models import ProductModel, Wish, Bucketlist, BucketlistItem
 
 User = get_user_model() 
 
@@ -20,10 +20,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 
-# class WishAPISerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Wish
-#         fields = ('product', 'user')
+class WishAPISerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wish
+        fields = ('product', 'user')
 
 class BucketlistItemSerializer(serializers.ModelSerializer):
     """

@@ -10,5 +10,5 @@ urlpatterns = [
     path('', views.ProductListApiView.as_view()),
     path('wishlist/', views.WishListApiView.as_view()),
     path('<int:pk>/wish/add/', views.WishAdd.as_view()),
-    path('wish/<int:pk>/favorite_delete/', views.WishDelete.as_view()),
+    path('<int:pk>/wish/delete/', views.WishDelete.as_view()),
 ]
